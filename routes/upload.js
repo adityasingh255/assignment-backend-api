@@ -24,12 +24,12 @@ router.post('/upload', upload.single('csv_file'), async (req, res) => {
     fs.createReadStream(req.file.path)
         .pipe(csv())
         .on('data', (row) => {
-            const { 'S. No.': serialNumber, 'Product Name': productName, 'Input Image Urls': inputImageUrls } = row;
+            const { 'S. No.': serialNumber, 'Product Name': productName, 'Input Image Urls': inputImageUrls,'Output Image Urls': outputImageUrls} = row;
             products.push({
                 serial_number: serialNumber,
                 product_name: productName,
                 input_image_urls: inputImageUrls.split(',').map(url => url.trim()), // Split input URLs by commas
-                output_image_urls: [] // Initialize empty array for output URLs
+                output_image_urls: outputImageUrls.split(',').map(url => url.trim()),
             });
         })
         .on('end', async () => {
